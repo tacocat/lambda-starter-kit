@@ -4,7 +4,7 @@ import com.tacocat.lambda.core.entity.Entity;
 import com.tacocat.lambda.core.platform.DesktopPlatform;
 import com.tacocat.lambda.graphics.presets.Square;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class GameApp {
     public static void main(String[] args) {
@@ -18,14 +18,10 @@ public class GameApp {
             entities.add(
                 new Entity(
                     new Renderable(new Square(Color.BLUE), 50f, -50f)
-                )
-            );
-            entities.add(
+                ),
                 new Entity(
                     new Renderable(new Square(Color.GREEN), -50f, -50f)
-                )
-            );
-            entities.add(
+                ),
                 new Entity(
                     new Renderable(new Square(Color.RED), 0f, 50f)
                 )
