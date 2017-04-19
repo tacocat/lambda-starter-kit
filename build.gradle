@@ -2,6 +2,7 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.4.1/userguide/tutorial_java_projects.html
  */
+import org.gradle.internal.os.OperatingSystem
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
@@ -18,8 +19,28 @@ repositories {
     }
 }
 
+// https://github.com/tacocat/lambda/issues/18
+// Only linux natives are currently packaged,
+// so this hack pulls in windows/mac natives
+switch ( OperatingSystem.current() ) {
+    case OperatingSystem.WINDOWS:
+        project.ext.lwjglNatives = "natives-windows"
+        break
+    case OperatingSystem.MAC_OS:
+        project.ext.lwjglNatives = "natives-macos"
+        break
+}
+
+project.ext.lwjglVersion = "3.1.1"
+
 dependencies {
     compile 'com.tacocat:lambda:0.+'
+
+    // Hack to load natives
+    runtime "org.lwjgl:lwjgl:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-glfw:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-openal:${lwjglVersion}:${lwjglNatives}"
+    runtime "org.lwjgl:lwjgl-opengl:${lwjglVersion}:${lwjglNatives}"
 }
 
 // Define the main class for the application
