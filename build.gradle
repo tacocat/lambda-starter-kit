@@ -10,8 +10,10 @@ apply plugin: 'java'
 // Apply the application plugin to add support for building an application
 apply plugin: 'application'
 
-// Create window only on first thread
-applicationDefaultJvmArgs = ["-XstartOnFirstThread"]
+// Required for running GLFW on Mac - create window only on first thread
+if ( OperatingSystem.current() == OperatingSystem.MAC_OS) {
+    applicationDefaultJvmArgs = ["-XstartOnFirstThread"]
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -23,11 +25,13 @@ repositories {
 }
 
 // https://github.com/tacocat/lambda/issues/18
-// Only linux natives are currently packaged,
-// so this hack pulls in windows/mac natives
+// This hack pulls in operating system specific natives
 switch ( OperatingSystem.current() ) {
     case OperatingSystem.WINDOWS:
         project.ext.lwjglNatives = "natives-windows"
+        break
+    case OperatingSystem.LINUX:
+        project.ext.lwjglNatives = "natives-linux"
         break
     case OperatingSystem.MAC_OS:
         project.ext.lwjglNatives = "natives-macos"
